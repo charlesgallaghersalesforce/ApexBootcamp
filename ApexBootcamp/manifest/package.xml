@@ -26,5 +26,14 @@
         <members>Onboarding_App_UtilityBar</members>
         <name>FlexiPage</name>
     </types>
+    <types>
+        <members>TriggerHandler</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>ValidatePoints</members>
+        <members>EmployeeAfterTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
     <version>52.0</version>
 </Package>

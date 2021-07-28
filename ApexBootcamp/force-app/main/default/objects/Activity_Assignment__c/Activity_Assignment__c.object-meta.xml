@@ -155,9 +155,10 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Activity Assignment</label>
     <nameField>
+        <displayFormat>A-{0000}</displayFormat>
         <label>Activity Assignment Name</label>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Activity Assignments</pluralLabel>
     <searchLayouts></searchLayouts>

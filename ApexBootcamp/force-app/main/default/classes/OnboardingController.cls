@@ -25,7 +25,6 @@ public with sharing class OnboardingController {
             data.name = 'Onboarding - ' + employee.FirstName + ' ' + employee.LastName;
             data.startDate = employee.Start_Date__c;
             data.endDate = employee.Onboarding_End_Date__c;
-            System.debug('startDate: ' + employee.Start_Date__c + ' endDate: ' + employee.Onboarding_End_Date__c);
             if (today > employee.Onboarding_End_Date__c) {
                 minutesExpected = totalMinutesInOnboarding;
                 data.weekNo = Integer.valueOf((employee.Start_Date__c.daysBetween(today)/7));

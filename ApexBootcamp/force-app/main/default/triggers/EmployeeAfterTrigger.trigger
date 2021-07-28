@@ -1,5 +1,5 @@
 trigger EmployeeAfterTrigger on Contact (after insert) 
 {
-    TriggerHandler handler = new TriggerHandler();
+    EmployeeTriggerHandler handler = new EmployeeTriggerHandler();
     handler.CreateActivityAssignments(Trigger.New);
 }

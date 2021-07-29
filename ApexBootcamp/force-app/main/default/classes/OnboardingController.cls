@@ -12,8 +12,7 @@ public with sharing class OnboardingController {
             Contact employee = [SELECT Id, FirstName, LastName, Start_Date__c, Onboarding_End_Date__c FROM Contact WHERE Id =: recordId];
 
             // Get list of activity assignments related to the employee's contact record
-            List<Activity_Assignment__c> activityAssignments = [SELECT Id, Name, Status__c, Actual_Minutes__c, Onboarding_Activity__r.Expected_Duration__c, 
-                                                                Onboarding_Activity__r.URL__c
+            List<Activity_Assignment__c> activityAssignments = [SELECT Id, Name, Status__c, Actual_Minutes__c, Onboarding_Activity__r.Expected_Duration__c
                                                                 FROM Activity_Assignment__c 
                                                                 WHERE Employee__c =: employee.Id];
 

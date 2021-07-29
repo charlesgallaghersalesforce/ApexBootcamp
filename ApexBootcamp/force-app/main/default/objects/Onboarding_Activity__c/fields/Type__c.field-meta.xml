@@ -9,21 +9,11 @@
     <type>Picklist</type>
     <valueSet>
         <valueSetDefinition>
-            <sorted>false</sorted>
+            <sorted>true</sorted>
             <value>
-                <fullName>Session</fullName>
+                <fullName>Aloha</fullName>
                 <default>false</default>
-                <label>Session</label>
-            </value>
-            <value>
-                <fullName>Module</fullName>
-                <default>false</default>
-                <label>Module</label>
-            </value>
-            <value>
-                <fullName>VolunteerFx</fullName>
-                <default>false</default>
-                <label>VolunteerFx</label>
+                <label>Aloha</label>
             </value>
             <value>
                 <fullName>Concierge</fullName>
@@ -31,29 +21,14 @@
                 <label>Concierge</label>
             </value>
             <value>
-                <fullName>Aloha</fullName>
+                <fullName>Module</fullName>
                 <default>false</default>
-                <label>Aloha</label>
+                <label>Module</label>
             </value>
             <value>
-                <fullName>Services Org</fullName>
+                <fullName>Org62</fullName>
                 <default>false</default>
-                <label>Services Org</label>
-            </value>
-            <value>
-                <fullName>Slides</fullName>
-                <default>false</default>
-                <label>Slides</label>
-            </value>
-            <value>
-                <fullName>Trailblazer</fullName>
-                <default>false</default>
-                <label>Trailblazer</label>
-            </value>
-            <value>
-                <fullName>Webassessor</fullName>
-                <default>false</default>
-                <label>Webassessor</label>
+                <label>Org62</label>
             </value>
             <value>
                 <fullName>Quip</fullName>
@@ -61,9 +36,39 @@
                 <label>Quip</label>
             </value>
             <value>
-                <fullName>Org62</fullName>
+                <fullName>Services Org</fullName>
                 <default>false</default>
-                <label>Org62</label>
+                <label>Services Org</label>
+            </value>
+            <value>
+                <fullName>Session</fullName>
+                <default>false</default>
+                <label>Session</label>
+            </value>
+            <value>
+                <fullName>Slides</fullName>
+                <default>false</default>
+                <label>Slides</label>
+            </value>
+            <value>
+                <fullName>Superbadge</fullName>
+                <default>false</default>
+                <label>Superbadge</label>
+            </value>
+            <value>
+                <fullName>Trailblazer</fullName>
+                <default>false</default>
+                <label>Trailblazer</label>
+            </value>
+            <value>
+                <fullName>VolunteerFx</fullName>
+                <default>false</default>
+                <label>VolunteerFx</label>
+            </value>
+            <value>
+                <fullName>Webassessor</fullName>
+                <default>false</default>
+                <label>Webassessor</label>
             </value>
         </valueSetDefinition>
     </valueSet>

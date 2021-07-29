@@ -2,8 +2,12 @@ trigger ValidatePoints on Onboarding_Activity__c (before insert, before update, 
 {
     TriggerHandler handler = new TriggerHandler();
     
-    if(Trigger.isInsert || Trigger.isUpdate)
+    if(Trigger.isBefore)
     {
-    	handler.ValidateActivityPoints(Trigger.New);
+        if(Trigger.isInsert || Trigger.isUpdate)
+        {
+            System.debug('Trigger.New: ' + Trigger.New);
+            handler.ValidateActivityPoints(Trigger.New);
+        } 
     }
 }

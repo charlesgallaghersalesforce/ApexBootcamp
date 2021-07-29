@@ -7,7 +7,7 @@
     <referenceTo>Onboarding_Activity__c</referenceTo>
     <relationshipLabel>Activity Assignments</relationshipLabel>
     <relationshipName>Onboarding_Activity_Assignments</relationshipName>
-    <required>false</required>
+    <required>true</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

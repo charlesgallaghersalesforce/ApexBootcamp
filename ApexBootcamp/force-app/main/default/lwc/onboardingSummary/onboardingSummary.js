@@ -6,6 +6,8 @@ export default class OnboardingSummary extends LightningElement {
     @api recordId;
     isLoading;
     onboardingData;
+    onboardingStartDate;
+    onboardingEndDate;
     progressActual;
     progressTarget;
 
@@ -20,30 +22,33 @@ export default class OnboardingSummary extends LightningElement {
     async getOnboardingData() {
         try {
             this.handleLoading();
-            const result = await getOnboardingSummary({recordId: this.recordId});
-            let responseWrapper = JSON.parse(result);
+            // const result = await getOnboardingSummary({recordId: this.recordId});
+            // let responseWrapper = JSON.parse(result);
+            let responseWrapper = await getOnboardingSummary({recordId: this.recordId});
 
-            if (!responseWrapper.status || !responseWrapper.data) {
+            if (responseWrapper.status == 'error' || !responseWrapper.data) {
                 const errorEvent = new ShowToastEvent({
                     title: `There was an issue retrieving onboarding data ${responseWrapper.errorMessage}`,
-                    variant: 'error'
+                    variant: 'error',
+                    mode: 'sticky'
                 });
                 this.dispatchEvent(errorEvent);
                 return;
             }
 
             this.onboardingData = responseWrapper.data;
-            let startDate = this.adjustForTimezone(new Date(this.onboardingData.startDate));
-            this.onboardingData.startDate = startDate.toLocaleDateString();
-            let endDate = this.adjustForTimezone(new Date(this.onboardingData.endDate));
-            this.onboardingData.endDate = endDate.toLocaleDateString();
+            var startDate = this.adjustForTimezone(new Date(this.onboardingData.startDate));
+            this.onboardingStartDate = startDate.toLocaleDateString();
+            var endDate = this.adjustForTimezone(new Date(this.onboardingData.endDate));
+            this.onboardingEndDate = endDate.toLocaleDateString();
             this.progressActual = ((this.onboardingData.achieved / this.onboardingData.totalOnboarding) * 100).toFixed(0);
             this.progressTarget = ((this.onboardingData.target / this.onboardingData.totalOnboarding) * 100).toFixed(0);
 
         } catch(error) {
             const errorEvent = new ShowToastEvent({
                 title: `Error retrieving onboarding data: ${error}`,
-                variant: 'error'
+                variant: 'error',
+                mode: 'sticky'
             });
             this.dispatchEvent(errorEvent);
         } finally {

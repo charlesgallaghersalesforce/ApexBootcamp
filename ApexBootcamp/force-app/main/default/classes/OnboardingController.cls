@@ -1,19 +1,32 @@
 public with sharing class OnboardingController {
 
     @AuraEnabled(cacheable=true)
-    public static String getOnboardingSummary(String recordId) {
+    public static ResponseWrapper getOnboardingSummary(String recordId) {
 
+        // Initialize the response object that will be returned to the LWC
         ResponseWrapper response = new ResponseWrapper();
 
         try {
+
+            // Get contact information from the current record 
             Contact employee = getContactInformation(recordId);
+
+            // Get list of activity assignments related to the employee's contact record
             List<Activity_Assignment__c> activityAssignments = getActivityAssignments(recordId);
 
+            // Initialize our totals
             Decimal minutesAchieved = 0;
             Decimal minutesExpected = 0;
             Decimal totalMinutesInOnboarding = 0;
             Date today = Date.today();
 
+            // Create the OnboardingData object and set the values
+            OnboardingData data = new OnboardingData();
+            data.name = 'Onboarding - ' + employee.FirstName + ' ' + employee.LastName;
+            data.startDate = employee.Start_Date__c;
+            data.endDate = employee.Onboarding_End_Date__c;
+
+            // Calculate the minutes achieved from all completed activity assignments
             for (Activity_Assignment__c assignment : activityAssignments) {
                 totalMinutesInOnboarding += assignment.Onboarding_Activity__r.Expected_Duration__c;
                 if (assignment.Status__c == 'Completed') {
@@ -21,11 +34,7 @@ public with sharing class OnboardingController {
                 }
             }
 
-            OnboardingData data = new OnboardingData();
-            data.name = 'Onboarding - ' + employee.FirstName + ' ' + employee.LastName;
-            data.startDate = employee.Start_Date__c;
-            data.endDate = employee.Onboarding_End_Date__c;
-            System.debug('startDate: ' + employee.Start_Date__c + ' endDate: ' + employee.Onboarding_End_Date__c);
+            // Calculate minutes expected and week number
             if (today > employee.Onboarding_End_Date__c) {
                 minutesExpected = totalMinutesInOnboarding;
                 data.weekNo = Integer.valueOf((employee.Start_Date__c.daysBetween(today)/7));
@@ -33,12 +42,15 @@ public with sharing class OnboardingController {
                 // Calculate the minutes expected based on today's date
                 Integer totalDaysInOnboarding = employee.Start_Date__c.daysBetween(today);
                 minutesExpected = (totalDaysInOnboarding * totalMinutesInOnboarding) / 90;
-
                 // Calculate week number
                 data.weekNo = Integer.valueOf((totalDaysInOnboarding/7));
             } else {
+                // Onboarding's start date is in the future
+                // Minutes expected should continue to be zero, week number should also be 0
                 data.weekNo = 0;
             }
+
+            // Calculate ahead/behind based on minutes achieved and minutes expected
             Decimal aheadBehind = (minutesAchieved - minutesExpected).setscale(1);
             if (aheadBehind >= 0) {
                 data.aheadBehind = aheadBehind + ' minutes ahead';
@@ -46,10 +58,12 @@ public with sharing class OnboardingController {
                 aheadBehind = aheadBehind * -1;
                 data.aheadBehind = aheadBehind + ' minutes behind';
             }
+
             data.achieved = minutesAchieved;
             data.target = minutesExpected.setscale(1);
             data.totalOnboarding = totalMinutesInOnboarding;
 
+            // Determine the current status based on the current progress
             data.status = 'On Pace';
             if (today > employee.Start_Date__c) {
                 Decimal progress = minutesAchieved / minutesExpected;
@@ -64,15 +78,17 @@ public with sharing class OnboardingController {
                 }
             }
 
+            // Set status and data object to the response object
             response.status = 'success';
             response.data = data;
             
         } catch (Exception e) {
+            // Set status and error to the response 
             response.status = 'error';
             response.errorMessage = e.getMessage();
         }
 
-        return JSON.serialize(response, true);
+        return response;
 
     }
 
@@ -89,20 +105,20 @@ public with sharing class OnboardingController {
     }
 
     public class ResponseWrapper {
-        public String status;
-        public String errorMessage;
-        public OnboardingData data;
+        @AuraEnabled public String status;
+        @AuraEnabled public String errorMessage;
+        @AuraEnabled public OnboardingData data;
     }
 
     public class OnboardingData {
-        public String name;
-        public Date startDate;
-        public Date endDate;
-        public String status;
-        public String aheadBehind;
-        public Decimal weekNo;
-        public Decimal achieved;
-        public Decimal target;
-        public Decimal totalOnboarding;
+        @AuraEnabled public String name;
+        @AuraEnabled public Date startDate;
+        @AuraEnabled public Date endDate;
+        @AuraEnabled public String status;
+        @AuraEnabled public String aheadBehind;
+        @AuraEnabled public Decimal weekNo;
+        @AuraEnabled public Decimal achieved;
+        @AuraEnabled public Decimal target;
+        @AuraEnabled public Decimal totalOnboarding;
     }
 }

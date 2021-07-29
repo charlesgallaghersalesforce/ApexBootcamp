@@ -9,10 +9,13 @@ public with sharing class OnboardingController {
         try {
 
             // Get contact information from the current record 
-            Contact employee = getContactInformation(recordId);
+            Contact employee = [SELECT Id, FirstName, LastName, Start_Date__c, Onboarding_End_Date__c FROM Contact WHERE Id =: recordId];
 
             // Get list of activity assignments related to the employee's contact record
-            List<Activity_Assignment__c> activityAssignments = getActivityAssignments(recordId);
+            List<Activity_Assignment__c> activityAssignments = [SELECT Id, Name, Status__c, Actual_Minutes__c, Onboarding_Activity__r.Expected_Duration__c, 
+                                                                Onboarding_Activity__r.URL__c
+                                                                FROM Activity_Assignment__c 
+                                                                WHERE Employee__c =: employee.Id];
 
             // Initialize our totals
             Decimal minutesAchieved = 0;
@@ -90,18 +93,6 @@ public with sharing class OnboardingController {
 
         return response;
 
-    }
-
-    public static Contact getContactInformation(String contactId) {
-        return [SELECT Id, FirstName, LastName, Start_Date__c, Onboarding_End_Date__c FROM Contact WHERE Id =: contactId];
-    }
-
-    public static List<Activity_Assignment__c> getActivityAssignments(String employeeId) {
-        return [SELECT Id, Name, Status__c, Actual_Minutes__c,
-                Onboarding_Activity__r.Name, Onboarding_Activity__r.Expected_Duration__c, Onboarding_Activity__r.Trailhead_Points__c, 
-                Onboarding_Activity__r.Type__c, Onboarding_Activity__r.URL__c, Onboarding_Activity__r.Onboarding__r.Type__c
-                FROM Activity_Assignment__c 
-                WHERE Employee__c =: employeeId];
     }
 
     public class ResponseWrapper {

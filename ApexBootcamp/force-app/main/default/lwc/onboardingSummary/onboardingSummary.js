@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getOnboardingSummary from '@salesforce/apex/OnboardingController.getOnboardingSummary';
 
 export default class OnboardingSummary extends LightningElement {
@@ -21,23 +22,39 @@ export default class OnboardingSummary extends LightningElement {
             this.handleLoading();
             const result = await getOnboardingSummary({recordId: this.recordId});
             let responseWrapper = JSON.parse(result);
+
+            if (!responseWrapper.status || !responseWrapper.data) {
+                const errorEvent = new ShowToastEvent({
+                    title: `There was an issue retrieving onboarding data ${responseWrapper.errorMessage}`,
+                    variant: 'error'
+                });
+                this.dispatchEvent(errorEvent);
+                return;
+            }
+
             this.onboardingData = responseWrapper.data;
-            let startDate = new Date(this.onboardingData.startDate).toLocaleDateString();
-            this.onboardingData.startDate = startDate;
-            let endDate = new Date(this.onboardingData.endDate).toLocaleDateString();
-            this.onboardingData.endDate = endDate;
+            let startDate = this.adjustForTimezone(new Date(this.onboardingData.startDate));
+            this.onboardingData.startDate = startDate.toLocaleDateString();
+            let endDate = this.adjustForTimezone(new Date(this.onboardingData.endDate));
+            this.onboardingData.endDate = endDate.toLocaleDateString();
             this.progressActual = ((this.onboardingData.achieved / this.onboardingData.totalOnboarding) * 100).toFixed(0);
             this.progressTarget = ((this.onboardingData.target / this.onboardingData.totalOnboarding) * 100).toFixed(0);
 
-            if (!responseWrapper.status || !responseWrapper.data) {
-                console.log(`There was an issue retrieving onboarding data ${responseWrapper.status}`);
-            }
-
         } catch(error) {
-            console.log(`There was an issue retrieving onboarding data ${error}`);
+            const errorEvent = new ShowToastEvent({
+                title: `Error retrieving onboarding data: ${error}`,
+                variant: 'error'
+            });
+            this.dispatchEvent(errorEvent);
         } finally {
             this.handleDoneLoading();
         }
+    }
+
+    adjustForTimezone(date){
+        var timeOffsetInMS = date.getTimezoneOffset() * 60000;
+        date.setTime(date.getTime() + timeOffsetInMS);
+        return date
     }
 
     // Handles loading event

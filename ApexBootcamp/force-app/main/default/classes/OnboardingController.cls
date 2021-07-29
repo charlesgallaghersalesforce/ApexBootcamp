@@ -38,7 +38,7 @@ public with sharing class OnboardingController {
             } else {
                 data.weekNo = 0;
             }
-            Decimal aheadBehind = (minutesAchieved - minutesExpected);
+            Decimal aheadBehind = (minutesAchieved - minutesExpected).setscale(1);
             if (aheadBehind >= 0) {
                 data.aheadBehind = aheadBehind + ' minutes ahead';
             } else {
@@ -46,18 +46,21 @@ public with sharing class OnboardingController {
                 data.aheadBehind = aheadBehind + ' minutes behind';
             }
             data.achieved = minutesAchieved;
-            data.target = minutesExpected;
+            data.target = minutesExpected.setscale(1);
             data.totalOnboarding = totalMinutesInOnboarding;
 
-            Decimal progress = minutesAchieved / minutesExpected;
-            if (progress > 1.2) {
-                data.status = 'Ahead of Pace';
-            } else if (progress >= 1.0 && progress <= 1.2) {
-                data.status = 'On Pace';
-            } else if (progress < 1.0 && progress > 0.8) {
-                data.status = 'Slightly Behind';
-            } else {
-                data.status = 'Far Behind';   
+            data.status = 'On Pace';
+            if (today > employee.Start_Date__c) {
+                Decimal progress = minutesAchieved / minutesExpected;
+                if (progress > 1.2) {
+                    data.status = 'Ahead of Pace';
+                } else if (progress >= 1.0 && progress <= 1.2) {
+                    data.status = 'On Pace';
+                } else if (progress < 1.0 && progress > 0.8) {
+                    data.status = 'Slightly Behind';
+                } else {
+                    data.status = 'Far Behind';   
+                }
             }
 
             response.status = 'success';

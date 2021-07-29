@@ -5,6 +5,10 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>F2AD4F7340594B9EA0CC5259F76C9146</members>
+        <name>ContentAsset</name>
+    </types>
+    <types>
         <members>Contact</members>
         <members>Onboarding__c</members>
         <members>Onboarding_Activity__c</members>
@@ -27,7 +31,9 @@
         <name>Profile</name>
     </types>
     <types>
+        <members>Contact_Record_Page</members>
         <members>Onboarding_App_UtilityBar</members>
+        <members>Onboarding_Record_Page</members>
         <name>FlexiPage</name>
     </types>
     <types>
@@ -44,8 +50,17 @@
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>*</members>
+        <members>Activity_Assignment__c</members>
+        <members>Onboarding__c</members>
+        <members>Onboarding_Activity__c</members>
         <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Employee__c.Activity_Assignment__c</members>
+        <members>Employee__c.Activity_Assignment__c</members>
+        <members>Employee__c.Activity_Assignment__c</members>
+        <members>Employee__c.Activity_Assignment__c</members>
+        <name>CustomField</name>
     </types>
     <version>52.0</version>
 </Package>
